@@ -2,8 +2,6 @@
  * this is a set which automatically forgets
  * a given entry when a new entry is set and the ttl
  * of the old one is over
- * TODO this is copied from the broadcast channel module
- * we should release it as own npm module and reuse it
  */
 export declare class ObliviousSet<T = any> {
     readonly ttl: number;

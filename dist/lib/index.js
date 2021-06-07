@@ -5,8 +5,6 @@ exports.now = exports.removeTooOldValues = exports.ObliviousSet = void 0;
  * this is a set which automatically forgets
  * a given entry when a new entry is set and the ttl
  * of the old one is over
- * TODO this is copied from the broadcast channel module
- * we should release it as own npm module and reuse it
  */
 var ObliviousSet = /** @class */ (function () {
     function ObliviousSet(ttl) {
@@ -51,8 +49,9 @@ function removeTooOldValues(obliviousSet) {
      */
     while (true) {
         var value = iterator.next().value;
-        if (!value)
+        if (!value) {
             return; // no more elements
+        }
         var time = obliviousSet.timeMap.get(value);
         if (time < olderThen) {
             obliviousSet.timeMap.delete(value);
