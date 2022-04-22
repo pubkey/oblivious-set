@@ -5,19 +5,17 @@
  * of the old one is over
  */
 export class ObliviousSet<T = any> {
-    public readonly set = new Set();
-    public readonly timeMap = new Map();
+    public readonly map = new Map();
     constructor(
         public readonly ttl: number
     ) { }
 
     has(value: T): boolean {
-        return this.set.has(value);
+        return this.map.has(value);
     }
 
     add(value: T): void {
-        this.timeMap.set(value, now());
-        this.set.add(value);
+        this.map.set(value, now());
 
         /**
          * When a new value is added,
@@ -31,8 +29,7 @@ export class ObliviousSet<T = any> {
     }
 
     clear() {
-        this.set.clear();
-        this.timeMap.clear();
+        this.map.clear();
     }
 }
 
@@ -45,21 +42,23 @@ export function removeTooOldValues(
     obliviousSet: ObliviousSet
 ) {
     const olderThen = now() - obliviousSet.ttl;
-    const iterator = obliviousSet.set[Symbol.iterator]();
+    const iterator = obliviousSet.map[Symbol.iterator]();
 
     /**
      * Because we can assume the new values are added at the bottom,
      * we start from the top and stop as soon as we reach a non-too-old value.
      */
     while (true) {
-        const value = iterator.next().value;
-        if (!value) {
+
+        const next = iterator.next().value;
+
+        if (!next) {
             return; // no more elements
         }
-        const time = obliviousSet.timeMap.get(value);
+        const value = next[0];
+        const time = next[1];
         if (time < olderThen) {
-            obliviousSet.timeMap.delete(value);
-            obliviousSet.set.delete(value);
+            obliviousSet.map.delete(value);
         } else {
             // We reached a value that is not old enough
             return;
