@@ -6,6 +6,12 @@
  */
 export class ObliviousSet<T = any> {
     public readonly map = new Map();
+
+    /**
+     * Creating calls to setTimeout() is expensive,
+     * so we only do that if there is not timeout already open.
+     */
+    public _to: boolean = false;
     constructor(
         public readonly ttl: number
     ) { }
@@ -23,9 +29,13 @@ export class ObliviousSet<T = any> {
          * to not block the cpu for more important stuff
          * that might happen.
          */
-        setTimeout(() => {
-            removeTooOldValues(this);
-        }, 0);
+        if (!this._to) {
+            this._to = true;
+            setTimeout(() => {
+                this._to = false;
+                removeTooOldValues(this);
+            }, 0);
+        }
     }
 
     clear() {

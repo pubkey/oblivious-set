@@ -7,6 +7,11 @@ var ObliviousSet = /** @class */ (function () {
     function ObliviousSet(ttl) {
         this.ttl = ttl;
         this.map = new Map();
+        /**
+         * Creating calls to setTimeout() is expensive,
+         * so we only do that if there is not timeout already open.
+         */
+        this._to = false;
     }
     ObliviousSet.prototype.has = function (value) {
         return this.map.has(value);
@@ -20,9 +25,13 @@ var ObliviousSet = /** @class */ (function () {
          * to not block the cpu for more important stuff
          * that might happen.
          */
-        setTimeout(function () {
-            removeTooOldValues(_this);
-        }, 0);
+        if (!this._to) {
+            this._to = true;
+            setTimeout(function () {
+                _this._to = false;
+                removeTooOldValues(_this);
+            }, 0);
+        }
     };
     ObliviousSet.prototype.clear = function () {
         this.map.clear();

@@ -6,6 +6,11 @@
 export declare class ObliviousSet<T = any> {
     readonly ttl: number;
     readonly map: Map<any, any>;
+    /**
+     * Creating calls to setTimeout() is expensive,
+     * so we only do that if there is not timeout already open.
+     */
+    _to: boolean;
     constructor(ttl: number);
     has(value: T): boolean;
     add(value: T): void;
