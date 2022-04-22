@@ -9,16 +9,14 @@ exports.now = exports.removeTooOldValues = exports.ObliviousSet = void 0;
 var ObliviousSet = /** @class */ (function () {
     function ObliviousSet(ttl) {
         this.ttl = ttl;
-        this.set = new Set();
-        this.timeMap = new Map();
+        this.map = new Map();
     }
     ObliviousSet.prototype.has = function (value) {
-        return this.set.has(value);
+        return this.map.has(value);
     };
     ObliviousSet.prototype.add = function (value) {
         var _this = this;
-        this.timeMap.set(value, now());
-        this.set.add(value);
+        this.map.set(value, now());
         /**
          * When a new value is added,
          * start the cleanup at the next tick
@@ -30,8 +28,7 @@ var ObliviousSet = /** @class */ (function () {
         }, 0);
     };
     ObliviousSet.prototype.clear = function () {
-        this.set.clear();
-        this.timeMap.clear();
+        this.map.clear();
     };
     return ObliviousSet;
 }());
@@ -42,20 +39,20 @@ exports.ObliviousSet = ObliviousSet;
  */
 function removeTooOldValues(obliviousSet) {
     var olderThen = now() - obliviousSet.ttl;
-    var iterator = obliviousSet.set[Symbol.iterator]();
+    var iterator = obliviousSet.map[Symbol.iterator]();
     /**
      * Because we can assume the new values are added at the bottom,
      * we start from the top and stop as soon as we reach a non-too-old value.
      */
     while (true) {
-        var value = iterator.next().value;
-        if (!value) {
+        var next = iterator.next().value;
+        if (!next) {
             return; // no more elements
         }
-        var time = obliviousSet.timeMap.get(value);
+        var value = next[0];
+        var time = next[1];
         if (time < olderThen) {
-            obliviousSet.timeMap.delete(value);
-            obliviousSet.set.delete(value);
+            obliviousSet.map.delete(value);
         }
         else {
             // We reached a value that is not old enough

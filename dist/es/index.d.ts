@@ -5,8 +5,7 @@
  */
 export declare class ObliviousSet<T = any> {
     readonly ttl: number;
-    readonly set: Set<unknown>;
-    readonly timeMap: Map<any, any>;
+    readonly map: Map<any, any>;
     constructor(ttl: number);
     has(value: T): boolean;
     add(value: T): void;
