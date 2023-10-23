@@ -3,21 +3,21 @@
  * a given entry when a new entry is set and the ttl
  * of the old one is over
  */
-var ObliviousSet = /** @class */ (function () {
-    function ObliviousSet(ttl) {
+export class ObliviousSet {
+    ttl;
+    map = new Map();
+    /**
+     * Creating calls to setTimeout() is expensive,
+     * so we only do that if there is not timeout already open.
+     */
+    _to = false;
+    constructor(ttl) {
         this.ttl = ttl;
-        this.map = new Map();
-        /**
-         * Creating calls to setTimeout() is expensive,
-         * so we only do that if there is not timeout already open.
-         */
-        this._to = false;
     }
-    ObliviousSet.prototype.has = function (value) {
+    has(value) {
         return this.map.has(value);
-    };
-    ObliviousSet.prototype.add = function (value) {
-        var _this = this;
+    }
+    add(value) {
         this.map.set(value, now());
         /**
          * When a new value is added,
@@ -27,36 +27,34 @@ var ObliviousSet = /** @class */ (function () {
          */
         if (!this._to) {
             this._to = true;
-            setTimeout(function () {
-                _this._to = false;
-                removeTooOldValues(_this);
+            setTimeout(() => {
+                this._to = false;
+                removeTooOldValues(this);
             }, 0);
         }
-    };
-    ObliviousSet.prototype.clear = function () {
+    }
+    clear() {
         this.map.clear();
-    };
-    return ObliviousSet;
-}());
-export { ObliviousSet };
+    }
+}
 /**
  * Removes all entries from the set
  * where the TTL has expired
  */
 export function removeTooOldValues(obliviousSet) {
-    var olderThen = now() - obliviousSet.ttl;
-    var iterator = obliviousSet.map[Symbol.iterator]();
+    const olderThen = now() - obliviousSet.ttl;
+    const iterator = obliviousSet.map[Symbol.iterator]();
     /**
      * Because we can assume the new values are added at the bottom,
      * we start from the top and stop as soon as we reach a non-too-old value.
      */
     while (true) {
-        var next = iterator.next().value;
+        const next = iterator.next().value;
         if (!next) {
             return; // no more elements
         }
-        var value = next[0];
-        var time = next[1];
+        const value = next[0];
+        const time = next[1];
         if (time < olderThen) {
             obliviousSet.map.delete(value);
         }
@@ -67,6 +65,6 @@ export function removeTooOldValues(obliviousSet) {
     }
 }
 export function now() {
-    return new Date().getTime();
+    return Date.now();
 }
 //# sourceMappingURL=index.js.map

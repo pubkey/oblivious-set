@@ -8,12 +8,11 @@
         "strict": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
-        "suppressImplicitAnyIndexErrors": true,
         "downlevelIteration": true,
         "declaration": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
-        "target": "es5",
+        "target": "es2022",
         "outDir": "./dist/lib",
         "lib": [
             "es7",
