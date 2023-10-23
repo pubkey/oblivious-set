@@ -77,7 +77,7 @@ export function removeTooOldValues(
 }
 
 export function now(): number {
-    return new Date().getTime();
+    return new Date.now();
 }
 
 
