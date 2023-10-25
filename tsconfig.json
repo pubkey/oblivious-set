@@ -1,19 +1,19 @@
 {
     "compilerOptions": {
+        "moduleResolution": "node",
+        "target": "ES2022",
         "removeComments": false,
         "preserveConstEnums": true,
         "sourceMap": true,
         "strictNullChecks": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strict": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "downlevelIteration": true,
-        "declaration": true,
-        "moduleResolution": "node",
         "esModuleInterop": true,
-        "target": "es2022",
-        "outDir": "./dist/lib",
+        "declaration": true,
+        "outDir": "./dist/cjs",
         "lib": [
             "es7",
             "dom"
@@ -24,7 +24,8 @@
         "tabSize": 2
     },
     "include": [
-        "src"
+        "src",
+        "test"
     ],
     "exclude": [
         "node_modules",

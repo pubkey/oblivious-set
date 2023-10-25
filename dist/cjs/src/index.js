@@ -1,9 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.now = exports.removeTooOldValues = exports.ObliviousSet = void 0;
 /**
  * this is a set which automatically forgets
  * a given entry when a new entry is set and the ttl
  * of the old one is over
  */
-export class ObliviousSet {
+class ObliviousSet {
     ttl;
     map = new Map();
     /**
@@ -37,11 +40,12 @@ export class ObliviousSet {
         this.map.clear();
     }
 }
+exports.ObliviousSet = ObliviousSet;
 /**
  * Removes all entries from the set
  * where the TTL has expired
  */
-export function removeTooOldValues(obliviousSet) {
+function removeTooOldValues(obliviousSet) {
     const olderThen = now() - obliviousSet.ttl;
     const iterator = obliviousSet.map[Symbol.iterator]();
     /**
@@ -64,7 +68,9 @@ export function removeTooOldValues(obliviousSet) {
         }
     }
 }
-export function now() {
+exports.removeTooOldValues = removeTooOldValues;
+function now() {
     return Date.now();
 }
+exports.now = now;
 //# sourceMappingURL=index.js.map
