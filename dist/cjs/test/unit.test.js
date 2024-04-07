@@ -77,5 +77,11 @@ describe('unit.test.js', () => {
         set.add('baz');
         assert.strictEqual(set.has('bar'), false);
     });
+    it('should return false for values after its ttl', async () => {
+        const set = new index_1.ObliviousSet(100);
+        set.add('foobar');
+        await async_test_util_1.default.wait(110);
+        assert.strictEqual(set.has('foobar'), false);
+    });
 });
 //# sourceMappingURL=unit.test.js.map

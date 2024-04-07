@@ -16,7 +16,17 @@ export class ObliviousSet<T = any> {
     ) { }
 
     has(value: T): boolean {
-        return this.map.has(value);
+        const valueTime = this.map.get(value);
+        if (valueTime === undefined) {
+            return false;
+        }
+
+        if (valueTime < now() - this.ttl) {
+            this.map.delete(value);
+            return false;
+        }
+
+        return true;
     }
 
     add(value: T): void {

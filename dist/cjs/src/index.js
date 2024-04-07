@@ -18,7 +18,15 @@ class ObliviousSet {
         this.ttl = ttl;
     }
     has(value) {
-        return this.map.has(value);
+        const valueTime = this.map.get(value);
+        if (valueTime === undefined) {
+            return false;
+        }
+        if (valueTime < now() - this.ttl) {
+            this.map.delete(value);
+            return false;
+        }
+        return true;
     }
     add(value) {
         this.map.delete(value);
