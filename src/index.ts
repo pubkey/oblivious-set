@@ -1,4 +1,3 @@
-
 /**
  * this is a set which automatically forgets
  * a given entry when a new entry is set and the ttl
@@ -21,6 +20,7 @@ export class ObliviousSet<T = any> {
     }
 
     add(value: T): void {
+        this.map.delete(value);
         this.map.set(value, now());
 
         /**

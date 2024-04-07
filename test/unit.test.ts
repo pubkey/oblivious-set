@@ -49,4 +49,19 @@ describe('unit.test.js', () => {
         const has = set.has('foobar');
         assert.strictEqual(false, has);
     });
+
+    it('should not update existing values', async () => {
+        const set = new ObliviousSet(100);
+        set.add('foo');
+        set.add('bar');
+        await AsyncTestUtil.wait(80);
+
+        set.add('foo');
+        await AsyncTestUtil.wait(110);
+
+        // trigger removeTooOldValues
+        set.add('baz');
+
+        assert.strictEqual(set.has('bar'), false);
+    });
 });

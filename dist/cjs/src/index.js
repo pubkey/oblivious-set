@@ -21,6 +21,7 @@ class ObliviousSet {
         return this.map.has(value);
     }
     add(value) {
+        this.map.delete(value);
         this.map.set(value, now());
         /**
          * When a new value is added,

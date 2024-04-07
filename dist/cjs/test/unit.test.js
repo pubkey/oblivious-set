@@ -66,5 +66,16 @@ describe('unit.test.js', () => {
         const has = set.has('foobar');
         assert.strictEqual(false, has);
     });
+    it('should not update existing values', async () => {
+        const set = new index_1.ObliviousSet(100);
+        set.add('foo');
+        set.add('bar');
+        await async_test_util_1.default.wait(80);
+        set.add('foo');
+        await async_test_util_1.default.wait(110);
+        // trigger removeTooOldValues
+        set.add('baz');
+        assert.strictEqual(set.has('bar'), false);
+    });
 });
 //# sourceMappingURL=unit.test.js.map
