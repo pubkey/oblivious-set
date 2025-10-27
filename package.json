@@ -1,6 +1,6 @@
 {
   "name": "oblivious-set",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Like a JavaScript Set() but with a TTL for entries",
   "keywords": [
     "set",

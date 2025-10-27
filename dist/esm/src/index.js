@@ -15,9 +15,18 @@ export class ObliviousSet {
         this.ttl = ttl;
     }
     has(value) {
-        return this.map.has(value);
+        const valueTime = this.map.get(value);
+        if (typeof valueTime === 'undefined') {
+            return false;
+        }
+        if (valueTime < now() - this.ttl) {
+            this.map.delete(value);
+            return false;
+        }
+        return true;
     }
     add(value) {
+        this.map.delete(value);
         this.map.set(value, now());
         /**
          * When a new value is added,
@@ -51,7 +60,7 @@ export function removeTooOldValues(obliviousSet) {
     while (true) {
         const next = iterator.next().value;
         if (!next) {
-            return; // no more elements
+            break; // no more elements
         }
         const value = next[0];
         const time = next[1];
@@ -60,7 +69,7 @@ export function removeTooOldValues(obliviousSet) {
         }
         else {
             // We reached a value that is not old enough
-            return;
+            break;
         }
     }
 }
