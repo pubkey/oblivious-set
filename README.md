@@ -28,3 +28,8 @@ console.log(obliviousSet.has('barfoo')); // > false
 // clear
 obliviousSet.clear();
 ```
+
+
+## Contributing
+
+GitHub issues for this project are closed. If you find a bug, please create a Pull Request with a test case reproducing the issue.
